@@ -21,17 +21,8 @@ package org.apache.gravitino.listener;
 import java.util.Map;
 import org.apache.gravitino.MetadataObject;
 import org.apache.gravitino.exceptions.NoSuchTagException;
-import org.apache.gravitino.listener.api.event.AlterTagFailureEvent;
-import org.apache.gravitino.listener.api.event.AssociateTagsForMetadataObjectFailureEvent;
-import org.apache.gravitino.listener.api.event.CreateTagFailureEvent;
-import org.apache.gravitino.listener.api.event.DeleteTagFailureEvent;
-import org.apache.gravitino.listener.api.event.GetTagFailureEvent;
-import org.apache.gravitino.listener.api.event.GetTagForMetadataObjectFailureEvent;
-import org.apache.gravitino.listener.api.event.ListMetadataObjectsForTagFailureEvent;
-import org.apache.gravitino.listener.api.event.ListTagsFailureEvent;
-import org.apache.gravitino.listener.api.event.ListTagsForMetadataObjectFailureEvent;
-import org.apache.gravitino.listener.api.event.ListTagsInfoFailureEvent;
-import org.apache.gravitino.listener.api.event.ListTagsInfoForMetadataObjectFailureEvent;
+import org.apache.gravitino.listener.api.event.CreateTagEvent;
+import org.apache.gravitino.listener.api.event.ListTagEvent;
 import org.apache.gravitino.listener.api.info.TagInfo;
 import org.apache.gravitino.tag.Tag;
 import org.apache.gravitino.tag.TagChange;
@@ -57,8 +48,9 @@ public class TagEventDispatcher implements TagDispatcher {
   public String[] listTags(String metalake) {
     // TODO: listTagsPreEvent
     try {
-      // TODO: listTagsEvent
-      return dispatcher.listTags(metalake);
+      String[] tags = dispatcher.listTags(metalake);
+      eventBus.dispatchEvent(new ListTagEvent(PrincipalUtils.getCurrentUserName(), metalake));
+      return tags;
     } catch (Exception e) {
       eventBus.dispatchEvent(
           new ListTagsFailureEvent(PrincipalUtils.getCurrentUserName(), metalake, e));
@@ -98,8 +90,9 @@ public class TagEventDispatcher implements TagDispatcher {
     TagInfo tagInfo = new TagInfo(name, comment, properties);
     // TODO: createTagPreEvent
     try {
-      // TODO: createTagEvent
-      return dispatcher.createTag(metalake, name, comment, properties);
+      Tag tag = dispatcher.createTag(metalake, name, comment, properties);
+      eventBus.dispatchEvent(new CreateTagEvent(PrincipalUtils.getCurrentUserName(), metalake, new TagInfo(tag.name(), tag.comment(), tag.properties())));
+      return tag;
     } catch (Exception e) {
       eventBus.dispatchEvent(
           new CreateTagFailureEvent(PrincipalUtils.getCurrentUserName(), metalake, tagInfo, e));
