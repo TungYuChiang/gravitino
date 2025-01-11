@@ -101,7 +101,7 @@ public class TestTagEvent {
     Tag[] result = dispatcher.listTagsInfo("metalake");
     Event event = dummyEventListener.popPostEvent();
     Assertions.assertEquals(ListTagInfoEvent.class, event.getClass());
-    Assertions.assertEquals(OperationType.LISTINFO_TAG, event.operationType());
+    Assertions.assertEquals(OperationType.LIST_TAGS_INFO, event.operationType());
     Assertions.assertEquals(OperationStatus.SUCCESS, event.operationStatus());
     Assertions.assertEquals(result, ((ListTagInfoEvent) event).tags());
   }
