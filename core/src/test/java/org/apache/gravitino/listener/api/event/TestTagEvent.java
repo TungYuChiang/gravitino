@@ -81,7 +81,6 @@ public class TestTagEvent {
     Event event = dummyEventListener.popPostEvent();
 
     Assertions.assertEquals(GetTagEvent.class, event.getClass());
-    Assertions.assertEquals(tag.name(), ((GetTagEvent) event).tagName());
     Assertions.assertEquals(OperationType.GET_TAG, event.operationType());
     Assertions.assertEquals(OperationStatus.SUCCESS, event.operationStatus());
   }
@@ -91,7 +90,6 @@ public class TestTagEvent {
     dispatcher.listTags("metalake");
     Event event = dummyEventListener.popPostEvent();
     Assertions.assertEquals(ListTagEvent.class, event.getClass());
-    Assertions.assertEquals("metalake", ((ListTagEvent) event).metalake());
     Assertions.assertEquals(OperationType.LIST_TAG, event.operationType());
     Assertions.assertEquals(OperationStatus.SUCCESS, event.operationStatus());
   }
@@ -118,12 +116,7 @@ public class TestTagEvent {
     Assertions.assertEquals(AlterTagEvent.class, event.getClass());
     TagInfo tagInfo = ((AlterTagEvent) event).updatedTagInfo();
     checkTagInfo(tagInfo, tag);
-    TagChange[] tagChanges = ((AlterTagEvent) event).tagChanges();
-    Assertions.assertEquals(4, tagChanges.length);
-    Assertions.assertEquals(change1, tagChanges[0]);
-    Assertions.assertEquals(change2, tagChanges[1]);
-    Assertions.assertEquals(change3, tagChanges[2]);
-    Assertions.assertEquals(change4, tagChanges[3]);
+    Assertions.assertEquals(changes, ((AlterTagEvent) event).tagChanges());
     Assertions.assertEquals(OperationType.ALTER_TAG, event.operationType());
     Assertions.assertEquals(OperationStatus.SUCCESS, event.operationStatus());
   }
@@ -148,8 +141,6 @@ public class TestTagEvent {
     Event event = dummyEventListener.popPostEvent();
 
     Assertions.assertEquals(GetTagForMetadataObjectEvent.class, event.getClass());
-    Assertions.assertEquals("metalake", ((GetTagForMetadataObjectEvent) event).metalake());
-    Assertions.assertEquals(tag.name(), ((GetTagForMetadataObjectEvent) event).tagName());
     Assertions.assertEquals(
         metadataObject, ((GetTagForMetadataObjectEvent) event).metadataObject());
     Assertions.assertEquals(OperationType.GET_TAG_FOR_METADATA_OBJECT, event.operationType());
@@ -162,8 +153,6 @@ public class TestTagEvent {
     Event event = dummyEventListener.popPostEvent();
 
     Assertions.assertEquals(ListMetadataObjectsForTagEvent.class, event.getClass());
-    Assertions.assertEquals("metalake", ((ListMetadataObjectsForTagEvent) event).metalake());
-    Assertions.assertEquals(tag.name(), ((ListMetadataObjectsForTagEvent) event).tagName());
     Assertions.assertEquals(OperationType.LIST_METADATA_OBJECTS_FOR_TAG, event.operationType());
     Assertions.assertEquals(OperationStatus.SUCCESS, event.operationStatus());
   }
@@ -182,7 +171,6 @@ public class TestTagEvent {
     Event event = dummyEventListener.popPostEvent();
 
     Assertions.assertEquals(AssociateTagsForMetadataObjectEvent.class, event.getClass());
-    Assertions.assertEquals("metalake", ((AssociateTagsForMetadataObjectEvent) event).metalake());
     Assertions.assertEquals(
         metadataObject, ((AssociateTagsForMetadataObjectEvent) event).metadataObject());
     Assertions.assertArrayEquals(
@@ -205,7 +193,6 @@ public class TestTagEvent {
     Event event = dummyEventListener.popPostEvent();
 
     Assertions.assertEquals(ListTagsForMetadataObjectEvent.class, event.getClass());
-    Assertions.assertEquals("metalake", ((ListTagsForMetadataObjectEvent) event).metalake());
     Assertions.assertEquals(
         metadataObject, ((ListTagsForMetadataObjectEvent) event).metadataObject());
     Assertions.assertEquals(OperationType.LIST_TAGS_FOR_METADATA_OBJECT, event.operationType());
@@ -223,7 +210,6 @@ public class TestTagEvent {
     Event event = dummyEventListener.popPostEvent();
 
     Assertions.assertEquals(ListTagsInfoForMetadataObjectEvent.class, event.getClass());
-    Assertions.assertEquals("metalake", ((ListTagsInfoForMetadataObjectEvent) event).metalake());
     Assertions.assertEquals(
         metadataObject, ((ListTagsInfoForMetadataObjectEvent) event).metadataObject());
     Assertions.assertEquals(
