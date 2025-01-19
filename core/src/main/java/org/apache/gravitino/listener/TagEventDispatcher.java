@@ -35,11 +35,11 @@ import org.apache.gravitino.listener.api.event.GetTagForMetadataObjectEvent;
 import org.apache.gravitino.listener.api.event.GetTagForMetadataObjectFailureEvent;
 import org.apache.gravitino.listener.api.event.ListMetadataObjectsForTagEvent;
 import org.apache.gravitino.listener.api.event.ListMetadataObjectsForTagFailureEvent;
-import org.apache.gravitino.listener.api.event.ListTagEvent;
-import org.apache.gravitino.listener.api.event.ListTagInfoEvent;
+import org.apache.gravitino.listener.api.event.ListTagsEvent;
 import org.apache.gravitino.listener.api.event.ListTagsFailureEvent;
 import org.apache.gravitino.listener.api.event.ListTagsForMetadataObjectEvent;
 import org.apache.gravitino.listener.api.event.ListTagsForMetadataObjectFailureEvent;
+import org.apache.gravitino.listener.api.event.ListTagsInfoEvent;
 import org.apache.gravitino.listener.api.event.ListTagsInfoFailureEvent;
 import org.apache.gravitino.listener.api.event.ListTagsInfoForMetadataObjectEvent;
 import org.apache.gravitino.listener.api.event.ListTagsInfoForMetadataObjectFailureEvent;
@@ -69,7 +69,7 @@ public class TagEventDispatcher implements TagDispatcher {
     // TODO: listTagsPreEvent
     try {
       String[] tagNames = dispatcher.listTags(metalake);
-      eventBus.dispatchEvent(new ListTagEvent(PrincipalUtils.getCurrentUserName(), metalake));
+      eventBus.dispatchEvent(new ListTagsEvent(PrincipalUtils.getCurrentUserName(), metalake));
       return tagNames;
     } catch (Exception e) {
       eventBus.dispatchEvent(
@@ -84,7 +84,7 @@ public class TagEventDispatcher implements TagDispatcher {
     try {
       Tag[] tags = dispatcher.listTagsInfo(metalake);
       eventBus.dispatchEvent(
-          new ListTagInfoEvent(PrincipalUtils.getCurrentUserName(), metalake, tags));
+          new ListTagsInfoEvent(PrincipalUtils.getCurrentUserName(), metalake, tags));
       return tags;
     } catch (Exception e) {
       eventBus.dispatchEvent(
